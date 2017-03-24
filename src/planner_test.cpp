@@ -19,6 +19,14 @@
 #include <segbot_arm_manipulation/arm_utils.h>
 #include <moveit/move_group_interface/move_group.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
+#include <ctime>
+
+
+using namespace std;
+
+
+clock_t begin;
+clock_t end;
 
 geometry_msgs::PoseStamped start_pose;
 geometry_msgs::PoseStamped pose_1;
@@ -47,11 +55,23 @@ bool service_cb(geometry_msgs::PoseStamped p_target){
     group.setPoseTarget(p_target);
 
     ROS_INFO("[mico_moveit_cartesianpose_service.cpp] starting to plan...");
+    
+    begin = clock();
     bool success = group.plan(my_plan);
-    if(success)
+    double duration; 
+    if(success){
+		end = clock();
+		duration = double(end - begin)/(CLOCKS_PER_SEC/1000); // MILLISECONDS
 		ROS_INFO("planning successful\n");
-	else 
+	}
+	else {
+		end = clock();
+		duration = double(end - begin)/(CLOCKS_PER_SEC/1000); // MILLISECONDS
 		ROS_INFO("not successful :( \n");
+	}
+	
+	ROS_INFO("DURATION FOR PLANNING: ");
+	ROS_INFO_STREAM(duration);
 			
     //call service
     // ROS_INFO("Printing Trajectory \n");
