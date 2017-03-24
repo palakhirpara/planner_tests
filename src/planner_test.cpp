@@ -19,7 +19,7 @@
 #include <segbot_arm_manipulation/arm_utils.h>
 #include <moveit/move_group_interface/move_group.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
-#include <ctime>
+#include <sys/time.h> 
 
 
 using namespace std;
@@ -28,6 +28,8 @@ using namespace std;
 clock_t begin;
 clock_t end;
 
+struct timeval b1, e1;
+
 geometry_msgs::PoseStamped start_pose;
 geometry_msgs::PoseStamped pose_1;
 geometry_msgs::PoseStamped pose_2;
@@ -35,7 +37,7 @@ geometry_msgs::PoseStamped pose_3;
 geometry_msgs::PoseStamped pose_4;
 ros::ServiceClient controller_client;
 
-bool service_cb(geometry_msgs::PoseStamped p_target){
+bool service_cb(geometry_msgs::PoseStamped p_target, int pose_number){
     ROS_INFO("[mico_moveit_cartesianpose_service.cpp] Request received!");
     
     moveit_utils::MicoController srv_controller;
@@ -61,17 +63,18 @@ bool service_cb(geometry_msgs::PoseStamped p_target){
     double duration; 
     if(success){
 		end = clock();
-		duration = double(end - begin)/(CLOCKS_PER_SEC/1000); // MILLISECONDS
+		duration = double(end - begin)/(CLOCKS_PER_SEC); // MILLISECONDS
 		ROS_INFO("planning successful\n");
 	}
 	else {
 		end = clock();
-		duration = double(end - begin)/(CLOCKS_PER_SEC/1000); // MILLISECONDS
+		duration = double(end - begin)/(CLOCKS_PER_SEC); // MILLISECONDS
 		ROS_INFO("not successful :( \n");
 	}
 	
-	ROS_INFO("DURATION FOR PLANNING: ");
+	ROS_INFO("TIME REPORT: ");
 	ROS_INFO_STREAM(duration);
+	cout << endl << "Planning Time for Pose " << pose_number << ": " << duration << " milliseconds" << endl;
 			
     //call service
     // ROS_INFO("Printing Trajectory \n");
@@ -82,6 +85,8 @@ bool service_cb(geometry_msgs::PoseStamped p_target){
 	
 	ROS_INFO("CALLING CONTROLLER CLIENT.");
 	
+	// reset begin to start counting time for trajectory
+	begin = clock();
     if(controller_client.call(srv_controller)){
        ROS_INFO("Service call sent. Prepare for movement.");
        //res.completed = srv_controller.response.done;
@@ -123,11 +128,13 @@ int main(int argc, char **argv)
   ros::NodeHandle nh;
   ros::AsyncSpinner spinner(1);
   spinner.start();
-  
+  double duration; 
   controller_client = nh.serviceClient<moveit_utils::MicoController>("mico_controller");
   signal(SIGINT, sig_handler);
   pressEnter();
   ROS_INFO("Planner Testing Starting...");
+  
+  // start pose
   ROS_INFO("Moving Arm to starting position");
   start_pose.header.frame_id = "mico_link_base";
   start_pose.pose.position.x = 0.181252196431; 
@@ -139,9 +146,15 @@ int main(int argc, char **argv)
   start_pose.pose.orientation.w = 0.21059688045;
   //pose_1.orientation.x = tf::createQuaternionMsgFromRollPitchYaw(0.0,0.0,0.0);
   ROS_INFO("Moving to Start Pose");
-  ROS_INFO_STREAM(start_pose);
-  service_cb(start_pose);
+  //ROS_INFO_STREAM(start_pose);
+    gettimeofday(&b1, NULL);
+
+  service_cb(start_pose, 0);
+  end = clock();
+  duration = double(end - begin)/(CLOCKS_PER_SEC); // MILLISECONDS
+  cout << endl << "Trajectory Time from Home to Start Pose: " << duration << " milliseconds" << endl;
   
+  // pose 1
   pose_1.header.frame_id = "mico_link_base";
   pose_1.pose.position.x = 0.321145832539; 
   pose_1.pose.position.y = 0.376617610455; 
@@ -151,9 +164,17 @@ int main(int argc, char **argv)
   pose_1.pose.orientation.z = 0.642069363965;
   pose_1.pose.orientation.w = 0.366165667839;
   ROS_INFO("Now Moving to Pose 1");
-  ROS_INFO_STREAM(pose_1);
-  service_cb(pose_1);
-  
+  //ROS_INFO_STREAM(pose_1);
+  service_cb(pose_1, 1);
+  gettimeofday(&e1, NULL);
+
+  end = clock();
+  //duration = double(end - begin)/(CLOCKS_PER_SEC); // MILLISECONDS
+  cout << endl << "Trajectory Time for Pose 1: " << duration << " milliseconds" << endl;
+
+  duration = (e1.tv_sec - b1.tv_sec) * 1000.0;      // sec to ms
+  duration += (e1.tv_usec - b1.tv_usec) / 1000.0;   // us to ms
+  cout << endl << "Total time: " <<  duration << "\n";
   //segbot_arm_manipulation::moveToPoseMoveIt(nh,pose_1);
   ros::spin();
 
