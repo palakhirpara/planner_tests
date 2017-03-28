@@ -2,6 +2,8 @@
 #include "ros/ros.h"
 #include "geometry_msgs/PoseStamped.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <vector>
 #include <math.h>
 #include <cstdlib>
@@ -23,25 +25,27 @@
 
 
 using namespace std;
-
-
-clock_t begin;
-clock_t end;
-
-struct timeval b1, e1;
-
+struct timeval begin, end;
 geometry_msgs::PoseStamped start_pose;
 geometry_msgs::PoseStamped pose_1;
 geometry_msgs::PoseStamped pose_2;
 geometry_msgs::PoseStamped pose_3;
 geometry_msgs::PoseStamped pose_4;
 ros::ServiceClient controller_client;
+double total_planning_time = 0.0;
+double total_trajectory_time = 0.0;
+ofstream outfile;
 
-bool service_cb(geometry_msgs::PoseStamped p_target, int pose_number){
+
+bool service_cb(geometry_msgs::PoseStamped p_target, int pose_number, string pn){
     ROS_INFO("[mico_moveit_cartesianpose_service.cpp] Request received!");
     
+    
+  
     moveit_utils::MicoController srv_controller;
     moveit::planning_interface::MoveGroup group("arm");
+    // See ompl_planning.yaml for a complete list
+    group.setPlannerId(pn);
     moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
     group.setPlanningTime(10.0); //5 second maximum for collision computation
     moveit::planning_interface::MoveGroup::Plan my_plan;
@@ -58,23 +62,26 @@ bool service_cb(geometry_msgs::PoseStamped p_target, int pose_number){
 
     ROS_INFO("[mico_moveit_cartesianpose_service.cpp] starting to plan...");
     
-    begin = clock();
+    gettimeofday(&begin, NULL);
     bool success = group.plan(my_plan);
     double duration; 
     if(success){
-		end = clock();
-		duration = double(end - begin)/(CLOCKS_PER_SEC); // MILLISECONDS
+		gettimeofday(&end, NULL);
 		ROS_INFO("planning successful\n");
 	}
 	else {
-		end = clock();
-		duration = double(end - begin)/(CLOCKS_PER_SEC); // MILLISECONDS
+		gettimeofday(&end, NULL);
 		ROS_INFO("not successful :( \n");
 	}
 	
 	ROS_INFO("TIME REPORT: ");
-	ROS_INFO_STREAM(duration);
+	duration = (end.tv_sec - begin.tv_sec) * 1000.0;      // sec to ms
+	duration += (end.tv_usec - begin.tv_usec) / 1000.0;   // us to ms
+	total_planning_time += duration;
 	cout << endl << "Planning Time for Pose " << pose_number << ": " << duration << " milliseconds" << endl;
+	
+	outfile << "Planning Time for Pose " << pose_number << ": " << duration << " ms" << endl;
+
 			
     //call service
     // ROS_INFO("Printing Trajectory \n");
@@ -86,7 +93,7 @@ bool service_cb(geometry_msgs::PoseStamped p_target, int pose_number){
 	ROS_INFO("CALLING CONTROLLER CLIENT.");
 	
 	// reset begin to start counting time for trajectory
-	begin = clock();
+	gettimeofday(&begin, NULL);
     if(controller_client.call(srv_controller)){
        ROS_INFO("Service call sent. Prepare for movement.");
        //res.completed = srv_controller.response.done;
@@ -120,7 +127,32 @@ void pressEnter(){
 }
 
 
+void move_to_pose_and_measure(double px, double py, 
+							  double pz, double ox, double oy, double oz, double ow, int pose_number, string pn){
+  geometry_msgs::PoseStamped pose;
+  double duration;
+  pose.header.frame_id = "mico_link_base";
+  pose.pose.position.x = px; 
+  pose.pose.position.y = py; 
+  pose.pose.position.z = pz; 
+  pose.pose.orientation.x = ox;
+  pose.pose.orientation.y = oy;
+  pose.pose.orientation.z = oz;
+  pose.pose.orientation.w = ow;
+  ROS_INFO("Moving to Next Pose");
+  //ROS_INFO_STREAM(pose);
+  service_cb(pose, pose_number, pn);
+  gettimeofday(&end, NULL);
+  duration = (end.tv_sec - begin.tv_sec) * 1000.0;      // sec to ms
+  duration += (end.tv_usec - begin.tv_usec) / 1000.0;   // us to ms
+  total_trajectory_time += duration;
+  cout << endl << "Trajectory Time for Pose " << pose_number << ": " << duration << " milliseconds" << endl;
+  outfile << "Trajectory Time for Pose " << pose_number << ": " << duration << " ms" << endl << endl;
 
+
+
+
+}
 
 int main(int argc, char **argv)
 {
@@ -129,52 +161,59 @@ int main(int argc, char **argv)
   ros::AsyncSpinner spinner(1);
   spinner.start();
   double duration; 
+  string planners[11] = {"SBLkConfigDefault", "ESTkConfigDefault", "LBKPIECEkConfigDefault" 
+	  ,"BKPIECEkConfigDefault","KPIECEkConfigDefault","RRTkConfigDefault"
+	  ,"RRTConnectkConfigDefault","RRTstarkConfigDefault","TRRTkConfigDefault"
+      ,"PRMkConfigDefault","PRMstarkConfigDefault"}; 
+  
+  outfile.open("planning_data.txt"); 
+  ROS_INFO("Homing Arm and Closing Fingers");
+  segbot_arm_manipulation::homeArm(nh);
+  segbot_arm_manipulation::closeHand();
   controller_client = nh.serviceClient<moveit_utils::MicoController>("mico_controller");
   signal(SIGINT, sig_handler);
   pressEnter();
   ROS_INFO("Planner Testing Starting...");
   
-  // start pose
-  ROS_INFO("Moving Arm to starting position");
-  start_pose.header.frame_id = "mico_link_base";
-  start_pose.pose.position.x = 0.181252196431; 
-  start_pose.pose.position.y = 0.50459575653; 
-  start_pose.pose.position.z = 0.192858144641; 
-  start_pose.pose.orientation.x = 0.196969260996;
-  start_pose.pose.orientation.y = 0.643877379238;
-  start_pose.pose.orientation.z = 0.708712907086;
-  start_pose.pose.orientation.w = 0.21059688045;
-  //pose_1.orientation.x = tf::createQuaternionMsgFromRollPitchYaw(0.0,0.0,0.0);
-  ROS_INFO("Moving to Start Pose");
-  //ROS_INFO_STREAM(start_pose);
-    gettimeofday(&b1, NULL);
+  for(int i = 0; i < 2; i++){
 
-  service_cb(start_pose, 0);
-  end = clock();
-  duration = double(end - begin)/(CLOCKS_PER_SEC); // MILLISECONDS
-  cout << endl << "Trajectory Time from Home to Start Pose: " << duration << " milliseconds" << endl;
+  cout << "Planner Name: " << planners[i] << endl << endl;
+  outfile << "Planner Name: " << planners[i] << endl << endl;
+  // pose 0 (From Home)
+  move_to_pose_and_measure(0.181252196431, 0.50459575653, 
+							  0.192858144641, 0.196969260996, 0.643877379238, 
+							  0.708712907086, 0.2105968804, 0, planners[i]);
+  // pose 1						  
+  move_to_pose_and_measure(0.321145832539, 0.376617610455, 
+							  0.362925946712, 0.3316365428476, 0.58624810362, 
+							  0.6420693639656, 0.366165667839, 1, planners[i]);
+  // pose 2						  
+  move_to_pose_and_measure(0.46166241169, 0.0376703366637, 
+							  0.199446335435, 0.574395015985, 0.3408209072 , 
+							  0.361313489507, 0.65066430448, 2, planners[i]);
+  // pose 3					  
+  move_to_pose_and_measure(0.260384321213, -0.187947839499, 
+							  0.308621138334, 0.616884295636, 0.511692874143, 
+							  0.368341805462, 0.4711140867129, 3, planners[i]);
+  // pose 4						  
+  move_to_pose_and_measure(0.114481061697,  -0.455266356468, 
+							  0.300507098436, 0.682321049804, 0.175997478152, 
+							  0.176532227353, 0.687240311233, 4, planners[i]);
+  // print to console						  
+  cout << endl << "++++++++++ Total Planning Time: " <<
+		total_planning_time << " ms or " << total_planning_time/1000 << " sec" << endl;
+  cout << endl << "++++++++++ Total Trajectory Time: " << 
+        total_trajectory_time << " ms or " << total_trajectory_time/1000 << " sec" << endl;
   
-  // pose 1
-  pose_1.header.frame_id = "mico_link_base";
-  pose_1.pose.position.x = 0.321145832539; 
-  pose_1.pose.position.y = 0.376617610455; 
-  pose_1.pose.position.z = 0.362925946712; 
-  pose_1.pose.orientation.x = 0.3316365428476;
-  pose_1.pose.orientation.y = 0.586248103624;
-  pose_1.pose.orientation.z = 0.642069363965;
-  pose_1.pose.orientation.w = 0.366165667839;
-  ROS_INFO("Now Moving to Pose 1");
-  //ROS_INFO_STREAM(pose_1);
-  service_cb(pose_1, 1);
-  gettimeofday(&e1, NULL);
+  // write results to a file
+  outfile << endl << "++++++++++ Total Planning Time: " <<
+		total_planning_time << " ms or " << total_planning_time/1000 << " sec" << endl;
+  outfile << endl << "++++++++++ Total Trajectory Time: " << 
+        total_trajectory_time << " ms or " << total_trajectory_time/1000 << " sec" << endl;
 
-  end = clock();
-  //duration = double(end - begin)/(CLOCKS_PER_SEC); // MILLISECONDS
-  cout << endl << "Trajectory Time for Pose 1: " << duration << " milliseconds" << endl;
-
-  duration = (e1.tv_sec - b1.tv_sec) * 1000.0;      // sec to ms
-  duration += (e1.tv_usec - b1.tv_usec) / 1000.0;   // us to ms
-  cout << endl << "Total time: " <<  duration << "\n";
+  }
+  
+  outfile.close();
   //segbot_arm_manipulation::moveToPoseMoveIt(nh,pose_1);
   ros::spin();
 

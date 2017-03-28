@@ -55,7 +55,7 @@ Pose4:
     z: 0.176532227353
     w: 0.687240311233
 
-    - SBLkConfigDefault
+ SBLkConfigDefault
     - ESTkConfigDefault
     - LBKPIECEkConfigDefault
     - BKPIECEkConfigDefault
