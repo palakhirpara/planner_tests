@@ -176,7 +176,7 @@ int main(int argc, char **argv)
   ROS_INFO("Planner Testing Starting...");
   
   for(int i = 0; i < 2; i++){
-
+  segbot_arm_manipulation::homeArm(nh); // to start at the same pose everytime
   cout << "Planner Name: " << planners[i] << endl << endl;
   outfile << "Planner Name: " << planners[i] << endl << endl;
   // pose 0 (From Home)
@@ -206,11 +206,14 @@ int main(int argc, char **argv)
         total_trajectory_time << " ms or " << total_trajectory_time/1000 << " sec" << endl;
   
   // write results to a file
-  outfile << endl << "++++++++++ Total Planning Time: " <<
+  outfile << "++++++++++ Total Planning Time: " <<
 		total_planning_time << " ms or " << total_planning_time/1000 << " sec" << endl;
-  outfile << endl << "++++++++++ Total Trajectory Time: " << 
-        total_trajectory_time << " ms or " << total_trajectory_time/1000 << " sec" << endl;
-
+  outfile << "++++++++++ Total Trajectory Time: " << 
+        total_trajectory_time << " ms or " << total_trajectory_time/1000 << " sec" << endl << endl;
+	
+  total_planning_time = 0.0;
+  total_trajectory_time = 0.0;
+  
   }
   
   outfile.close();
