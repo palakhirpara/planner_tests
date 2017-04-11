@@ -35,13 +35,12 @@ ros::ServiceClient controller_client;
 double total_planning_time = 0.0;
 double total_trajectory_time = 0.0;
 ofstream outfile;
+ofstream outfilecsv;
 
 
 bool service_cb(geometry_msgs::PoseStamped p_target, int pose_number, string pn){
     ROS_INFO("[mico_moveit_cartesianpose_service.cpp] Request received!");
     
-    
-  
     moveit_utils::MicoController srv_controller;
     moveit::planning_interface::MoveGroup group("arm");
     // See ompl_planning.yaml for a complete list
@@ -81,11 +80,8 @@ bool service_cb(geometry_msgs::PoseStamped p_target, int pose_number, string pn)
 	cout << endl << "Planning Time for Pose " << pose_number << ": " << duration << " milliseconds" << endl;
 	
 	outfile << "Planning Time for Pose " << pose_number << ": " << duration << " ms" << endl;
+	outfilecsv << pose_number << "," << duration << ",";
 
-			
-    //call service
-    // ROS_INFO("Printing Trajectory \n");
-    // ROS_INFO_STREAM(my_plan.trajectory_);
     moveit_utils::MicoController srv;
     srv_controller.request.trajectory = my_plan.trajectory_;
 
@@ -148,6 +144,7 @@ void move_to_pose_and_measure(double px, double py,
   total_trajectory_time += duration;
   cout << endl << "Trajectory Time for Pose " << pose_number << ": " << duration << " milliseconds" << endl;
   outfile << "Trajectory Time for Pose " << pose_number << ": " << duration << " ms" << endl << endl;
+  outfilecsv << duration << endl;
 
 
 
@@ -166,39 +163,52 @@ int main(int argc, char **argv)
 	  ,"RRTConnectkConfigDefault","RRTstarkConfigDefault","TRRTkConfigDefault"
       ,"PRMkConfigDefault","PRMstarkConfigDefault"}; 
   
-  outfile.open("planning_data.txt"); 
-  ROS_INFO("Homing Arm and Closing Fingers");
-  segbot_arm_manipulation::homeArm(nh);
+  outfile.open("/home/users/palak96/catkin_ws/src/planner_tests/planning_data.txt" , ios::out | ios::app );
+  outfilecsv.open("/home/users/palak96/catkin_ws/src/planner_tests/planning_data.csv" , ios::out | ios::app ); 
+    
+  //segbot_arm_manipulation::homeArm(nh);
   segbot_arm_manipulation::closeHand();
   controller_client = nh.serviceClient<moveit_utils::MicoController>("mico_controller");
   signal(SIGINT, sig_handler);
   pressEnter();
   ROS_INFO("Planner Testing Starting...");
   
+  // change 2 to 11;
   for(int i = 0; i < 2; i++){
-  segbot_arm_manipulation::homeArm(nh); // to start at the same pose everytime
   cout << "Planner Name: " << planners[i] << endl << endl;
   outfile << "Planner Name: " << planners[i] << endl << endl;
-  // pose 0 (From Home)
+  outfilecsv << planners[i] << endl;
+  // pose 0
+  segbot_arm_manipulation::homeArm(nh); // to start at the same pose everytime
   move_to_pose_and_measure(0.181252196431, 0.50459575653, 
 							  0.192858144641, 0.196969260996, 0.643877379238, 
 							  0.708712907086, 0.2105968804, 0, planners[i]);
-  // pose 1						  
+  // pose 1					
+  segbot_arm_manipulation::homeArm(nh); // to start at the same pose everytime	  
   move_to_pose_and_measure(0.321145832539, 0.376617610455, 
 							  0.362925946712, 0.3316365428476, 0.58624810362, 
 							  0.6420693639656, 0.366165667839, 1, planners[i]);
-  // pose 2						  
+  // pose 2	
+  segbot_arm_manipulation::homeArm(nh);					  
   move_to_pose_and_measure(0.46166241169, 0.0376703366637, 
 							  0.199446335435, 0.574395015985, 0.3408209072 , 
 							  0.361313489507, 0.65066430448, 2, planners[i]);
-  // pose 3					  
+  // pose 3		
+  segbot_arm_manipulation::homeArm(nh);			  
   move_to_pose_and_measure(0.260384321213, -0.187947839499, 
 							  0.308621138334, 0.616884295636, 0.511692874143, 
 							  0.368341805462, 0.4711140867129, 3, planners[i]);
-  // pose 4						  
+  // pose 4	
+  segbot_arm_manipulation::homeArm(nh);					  
   move_to_pose_and_measure(0.114481061697,  -0.455266356468, 
 							  0.300507098436, 0.682321049804, 0.175997478152, 
 							  0.176532227353, 0.687240311233, 4, planners[i]);
+							
+  // pose 5	
+  segbot_arm_manipulation::homeArm(nh);					  
+  move_to_pose_and_measure(0.511899292469,  0.0834245383739, 
+							  0.00473425397649, 0.310907854703, 0.742598419966, 
+							  0.513918963892, 0.296262031149, 5, planners[i]);
   // print to console						  
   cout << endl << "++++++++++ Total Planning Time: " <<
 		total_planning_time << " ms or " << total_planning_time/1000 << " sec" << endl;
@@ -207,15 +217,19 @@ int main(int argc, char **argv)
   
   // write results to a file
   outfile << "++++++++++ Total Planning Time: " <<
-		total_planning_time << " ms or " << total_planning_time/1000 << " sec" << endl;
+		total_planning_time << " ms or " << total_planning_time/1000 << " sec" << endl;  
   outfile << "++++++++++ Total Trajectory Time: " << 
         total_trajectory_time << " ms or " << total_trajectory_time/1000 << " sec" << endl << endl;
-	
+
+  outfilecsv << "Total" << "," << total_planning_time << "," << total_trajectory_time << endl;
   total_planning_time = 0.0;
   total_trajectory_time = 0.0;
   
   }
-  
+  segbot_arm_manipulation::homeArm(nh);
+  outfile << "End of Experiment " << endl << endl;
+  outfilecsv << "End of Experiment" << endl;
+  outfilecsv.close();
   outfile.close();
   //segbot_arm_manipulation::moveToPoseMoveIt(nh,pose_1);
   ros::spin();
