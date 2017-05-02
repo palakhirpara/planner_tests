@@ -1,74 +1,153 @@
 Planner Name: SBLkConfigDefault
 
-Planning Time for Pose 0: 659.577 ms
-Trajectory Time for Pose 0: 9916.73 ms
+Planning Time for Pose 0: 1139.95 ms
+Trajectory Time for Pose 0: 8568.96 ms
 
-Planning Time for Pose 1: 665.479 ms
-Trajectory Time for Pose 1: 7740.03 ms
+Planning Time for Pose 1: 220.025 ms
+Trajectory Time for Pose 1: 11140.3 ms
 
-Planning Time for Pose 2: 474.718 ms
-Trajectory Time for Pose 2: 11141.5 ms
+Planning Time for Pose 2: 473.114 ms
+Trajectory Time for Pose 2: 9965.07 ms
 
-Planning Time for Pose 3: 718.372 ms
-Trajectory Time for Pose 3: 2190.31 ms
+Planning Time for Pose 3: 919.971 ms
+Trajectory Time for Pose 3: 13341.1 ms
 
-Planning Time for Pose 4: 487.223 ms
-Trajectory Time for Pose 4: 12541.7 ms
+Planning Time for Pose 4: 604.484 ms
+Trajectory Time for Pose 4: 12543.1 ms
 
-Planning Time for Pose 5: 505.467 ms
-Trajectory Time for Pose 5: 5065.39 ms
+Planning Time for Pose 5: 273.193 ms
+Trajectory Time for Pose 5: 9965.42 ms
 
-++++++++++ Total Planning Time: 3510.84 ms or 3.51084 sec
-++++++++++ Total Trajectory Time: 48595.7 ms or 48.5957 sec
-
-End of Experiment 
-Planner Name: SBLkConfigDefault
-
-Planner Name: SBLkConfigDefault
-
-Planning Time for Pose 0: 1123.82 ms
-Trajectory Time for Pose 0: 10615.6 ms
-
-Planning Time for Pose 1: 298.396 ms
-Trajectory Time for Pose 1: 11140.6 ms
-
-Planning Time for Pose 2: 623.323 ms
-Trajectory Time for Pose 2: 11139.7 ms
-
-Planning Time for Pose 3: 326.787 ms
-Trajectory Time for Pose 3: 12141.4 ms
-
-Planning Time for Pose 4: 436.674 ms
-Trajectory Time for Pose 4: 12541 ms
-
-Planning Time for Pose 5: 455.894 ms
-Trajectory Time for Pose 5: 9965.41 ms
-
-++++++++++ Total Planning Time: 3264.89 ms or 3.26489 sec
-++++++++++ Total Trajectory Time: 67543.7 ms or 67.5437 sec
+++++++++++ Total Planning Time: 3630.74 ms or 3.63074 sec
+++++++++++ Total Trajectory Time: 65524 ms or 65.524 sec
 
 Planner Name: ESTkConfigDefault
 
-Planning Time for Pose 0: 784.459 ms
-Trajectory Time for Pose 0: 10618.7 ms
+Planning Time for Pose 0: 56.949 ms
+Trajectory Time for Pose 0: 8564.81 ms
 
-Planning Time for Pose 1: 331.554 ms
-Trajectory Time for Pose 1: 11141.9 ms
+Planning Time for Pose 1: 132.208 ms
+Trajectory Time for Pose 1: 11139.4 ms
 
-Planning Time for Pose 2: 447.823 ms
-Trajectory Time for Pose 2: 11139.7 ms
+Planning Time for Pose 2: 198.105 ms
+Trajectory Time for Pose 2: 11141.6 ms
 
-Planning Time for Pose 3: 189.971 ms
-Trajectory Time for Pose 3: 2190.23 ms
+Planning Time for Pose 3: 310.025 ms
+Trajectory Time for Pose 3: 18289.9 ms
 
-Planning Time for Pose 4: 208.549 ms
-Trajectory Time for Pose 4: 3165.75 ms
+Planning Time for Pose 4: 54.926 ms
+Trajectory Time for Pose 4: 3165.34 ms
 
-Planning Time for Pose 5: 89.742 ms
-Trajectory Time for Pose 5: 9969.71 ms
+Planning Time for Pose 5: 151.165 ms
+Trajectory Time for Pose 5: 5064.62 ms
 
-++++++++++ Total Planning Time: 2052.1 ms or 2.0521 sec
-++++++++++ Total Trajectory Time: 48226 ms or 48.226 sec
+++++++++++ Total Planning Time: 903.378 ms or 0.903378 sec
+++++++++++ Total Trajectory Time: 57365.7 ms or 57.3657 sec
 
 End of Experiment 
-End of Experiment
+Planner Name: SBLkConfigDefault
+
+Planning Time for Pose 0: 780.039 ms
+Trajectory Time for Pose 0: 6674.84 ms
+
+Planning Time for Pose 1: 2186.69 ms
+Trajectory Time for Pose 1: 7779.66 ms
+
+Planning Time for Pose 2: 810.629 ms
+Trajectory Time for Pose 2: 11144.8 ms
+
+Planning Time for Pose 3: 2465.42 ms
+Trajectory Time for Pose 3: 2190.34 ms
+
+Planning Time for Pose 4: 530.558 ms
+Trajectory Time for Pose 4: 12561.7 ms
+
+Planning Time for Pose 5: 1942.89 ms
+Trajectory Time for Pose 5: 5107.36 ms
+
+++++++++++ Total Planning Time: 8716.22 ms or 8.71622 sec
+++++++++++ Total Trajectory Time: 45458.7 ms or 45.4587 sec
+
+Planner Name: ESTkConfigDefault
+
+Planning Time for Pose 0: 189.156 ms
+Trajectory Time for Pose 0: 9920.66 ms
+
+Planning Time for Pose 1: 370.509 ms
+Trajectory Time for Pose 1: 7770.68 ms
+
+Planning Time for Pose 2: 240.733 ms
+Trajectory Time for Pose 2: 10008.5 ms
+
+Planning Time for Pose 3: 656.752 ms
+Trajectory Time for Pose 3: 2197.82 ms
+
+Planning Time for Pose 4: 67.99 ms
+Trajectory Time for Pose 4: 3165.52 ms
+
+Planning Time for Pose 5: 138.394 ms
+Trajectory Time for Pose 5: 5077.18 ms
+
+++++++++++ Total Planning Time: 1663.53 ms or 1.66353 sec
+++++++++++ Total Trajectory Time: 38140.4 ms or 38.1404 sec
+
+End of Experiment 
+
+Planner Name: SBLkConfigDefault
+
+Planning Time for Pose 0: 3009.29 ms
+Planner Name: SBLkConfigDefault
+
+Planning Time for Pose 0: 1336.26 ms
+Trajectory Time for Pose 0: 27.558 ms
+
+Planning Time for Pose 1: 457.673 ms
+Trajectory Time for Pose 1: 23.575 ms
+
+Planning Time for Pose 2: 264.667 ms
+Trajectory Time for Pose 2: 25.691 ms
+
+Planner Name: SBLkConfigDefault
+
+Planning Time for Pose 0: 240.003 ms
+Trajectory Time for Pose 0: 26.013 ms
+
+Planner Name: SBLkConfigDefault
+
+Planning Time for Pose 0: 1827.66 ms
+Trajectory Time for Pose 0: 22.468 ms
+
+Planner Name: SBLkConfigDefault
+
+Planning Time for Pose 0: 652.103 ms
+Trajectory Time for Pose 0: 23.218 ms
+
+Planning Time for Pose 1: 937.521 ms
+Trajectory Time for Pose 1: 21.288 ms
+
+Planner Name: SBLkConfigDefault
+
+Planning Time for Pose 0: 642.915 ms
+Trajectory Time for Pose 0: 19.488 ms
+
+Planning Time for Pose 1: 712.427 ms
+Trajectory Time for Pose 1: 26.313 ms
+
+Planner Name: SBLkConfigDefault
+
+Planning Time for Pose 0: 754.242 ms
+Trajectory Time for Pose 0: 21.779 ms
+
+Planning Time for Pose 1: 217.085 ms
+Trajectory Time for Pose 1: 35.134 ms
+
+Planner Name: SBLkConfigDefault
+
+Planning Time for Pose 0: 604.304 ms
+Trajectory Time for Pose 0: 25.204 ms
+
+Planner Name: SBLkConfigDefault
+
+Planning Time for Pose 0: 1315.01 ms
+Trajectory Time for Pose 0: 72.696 ms
+

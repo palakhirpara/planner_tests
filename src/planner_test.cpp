@@ -34,6 +34,9 @@ geometry_msgs::PoseStamped pose_4;
 ros::ServiceClient controller_client;
 double total_planning_time = 0.0;
 double total_trajectory_time = 0.0;
+double duration_expected = 0.0;
+std::vector<trajectory_msgs::JointTrajectoryPoint> t_points;
+
 ofstream outfile;
 ofstream outfilecsv;
 
@@ -57,6 +60,8 @@ bool service_cb(geometry_msgs::PoseStamped p_target, int pose_number, string pn)
     //ROS_INFO_STREAM(end_pose);
     
     group.setStartState(*group.getCurrentState());
+    //ROS_INFO("Current State");
+    //ROS_INFO_STREAM(group.getCurrentState());
     group.setPoseTarget(p_target);
 
     ROS_INFO("[mico_moveit_cartesianpose_service.cpp] starting to plan...");
@@ -84,21 +89,27 @@ bool service_cb(geometry_msgs::PoseStamped p_target, int pose_number, string pn)
 
     moveit_utils::MicoController srv;
     srv_controller.request.trajectory = my_plan.trajectory_;
-
-	
-	ROS_INFO("CALLING CONTROLLER CLIENT.");
+    
+    t_points = my_plan.trajectory_.joint_trajectory.points;
+    int size = t_points.size();
+    duration_expected = t_points.at(t_points.size()-1).time_from_start.toSec();
+    //ROS_INFO_STREAM(my_plan.trajectory_);
+    cout << endl << "Expected Time: " << duration_expected << endl;
+  
+	//ROS_INFO("CALLING CONTROLLER CLIENT.");
 	
 	// reset begin to start counting time for trajectory
-	gettimeofday(&begin, NULL);
-    if(controller_client.call(srv_controller)){
-       ROS_INFO("Service call sent. Prepare for movement.");
+	//gettimeofday(&begin, NULL);
+    //if(controller_client.call(srv_controller)){
+      // ROS_INFO("Service call sent. Prepare for movement.");
        //res.completed = srv_controller.response.done;
-    }
-    else {
-      ROS_INFO("Service call failed. Is the service running?");
+    //}
+    //else {
+      //ROS_INFO("Service call failed. Is the service running?");
       //res.completed = false;
-    }
+    //}
   
+	
     ros::spinOnce();
     return true;
 }
@@ -138,13 +149,13 @@ void move_to_pose_and_measure(double px, double py,
   ROS_INFO("Moving to Next Pose");
   //ROS_INFO_STREAM(pose);
   service_cb(pose, pose_number, pn);
-  gettimeofday(&end, NULL);
+  //gettimeofday(&end, NULL);
   duration = (end.tv_sec - begin.tv_sec) * 1000.0;      // sec to ms
   duration += (end.tv_usec - begin.tv_usec) / 1000.0;   // us to ms
   total_trajectory_time += duration;
-  cout << endl << "Trajectory Time for Pose " << pose_number << ": " << duration << " milliseconds" << endl;
-  outfile << "Trajectory Time for Pose " << pose_number << ": " << duration << " ms" << endl << endl;
-  outfilecsv << duration << endl;
+  cout << endl << "Trajectory Time for Pose " << pose_number << ": " << duration_expected << " seconds" << endl;
+  outfile << "Trajectory Time for Pose " << pose_number << ": " << duration_expected << " seconds" << endl;
+  outfilecsv << duration_expected << endl;
 
 
 
@@ -179,33 +190,33 @@ int main(int argc, char **argv)
   outfile << "Planner Name: " << planners[i] << endl << endl;
   outfilecsv << planners[i] << endl;
   // pose 0
-  segbot_arm_manipulation::homeArm(nh); // to start at the same pose everytime
+  //segbot_arm_manipulation::homeArm(nh); // to start at the same pose everytime
   move_to_pose_and_measure(0.181252196431, 0.50459575653, 
 							  0.192858144641, 0.196969260996, 0.643877379238, 
 							  0.708712907086, 0.2105968804, 0, planners[i]);
   // pose 1					
-  segbot_arm_manipulation::homeArm(nh); // to start at the same pose everytime	  
+  //segbot_arm_manipulation::homeArm(nh); // to start at the same pose everytime	  
   move_to_pose_and_measure(0.321145832539, 0.376617610455, 
 							  0.362925946712, 0.3316365428476, 0.58624810362, 
 							  0.6420693639656, 0.366165667839, 1, planners[i]);
   // pose 2	
-  segbot_arm_manipulation::homeArm(nh);					  
+  //segbot_arm_manipulation::homeArm(nh);					  
   move_to_pose_and_measure(0.46166241169, 0.0376703366637, 
 							  0.199446335435, 0.574395015985, 0.3408209072 , 
 							  0.361313489507, 0.65066430448, 2, planners[i]);
   // pose 3		
-  segbot_arm_manipulation::homeArm(nh);			  
+  //segbot_arm_manipulation::homeArm(nh);			  
   move_to_pose_and_measure(0.260384321213, -0.187947839499, 
 							  0.308621138334, 0.616884295636, 0.511692874143, 
 							  0.368341805462, 0.4711140867129, 3, planners[i]);
   // pose 4	
-  segbot_arm_manipulation::homeArm(nh);					  
+  //segbot_arm_manipulation::homeArm(nh);					  
   move_to_pose_and_measure(0.114481061697,  -0.455266356468, 
 							  0.300507098436, 0.682321049804, 0.175997478152, 
 							  0.176532227353, 0.687240311233, 4, planners[i]);
 							
   // pose 5	
-  segbot_arm_manipulation::homeArm(nh);					  
+  //segbot_arm_manipulation::homeArm(nh);					  
   move_to_pose_and_measure(0.511899292469,  0.0834245383739, 
 							  0.00473425397649, 0.310907854703, 0.742598419966, 
 							  0.513918963892, 0.296262031149, 5, planners[i]);
@@ -226,9 +237,9 @@ int main(int argc, char **argv)
   total_trajectory_time = 0.0;
   
   }
-  segbot_arm_manipulation::homeArm(nh);
+  //segbot_arm_manipulation::homeArm(nh);
   outfile << "End of Experiment " << endl << endl;
-  outfilecsv << "End of Experiment" << endl;
+  outfilecsv << "End of Experiment" << endl << endl;
   outfilecsv.close();
   outfile.close();
   //segbot_arm_manipulation::moveToPoseMoveIt(nh,pose_1);
