@@ -92,9 +92,17 @@ bool service_cb(geometry_msgs::PoseStamped p_target, int pose_number, string pn)
     
     t_points = my_plan.trajectory_.joint_trajectory.points;
     int size = t_points.size();
+    
+    if(success){
+		
     duration_expected = t_points.at(t_points.size()-1).time_from_start.toSec();
     //ROS_INFO_STREAM(my_plan.trajectory_);
     cout << endl << "Expected Time: " << duration_expected << endl;
+    }
+    else{
+		outfile << "Not successful " << endl << endl;
+		outfilecsv << "Not successful" << endl<< endl;
+	}
   
 	//ROS_INFO("CALLING CONTROLLER CLIENT.");
 	
@@ -110,7 +118,7 @@ bool service_cb(geometry_msgs::PoseStamped p_target, int pose_number, string pn)
     //}
   
 	
-    ros::spinOnce();
+    //ros::spinOnce();
     return true;
 }
 
@@ -152,7 +160,7 @@ void move_to_pose_and_measure(double px, double py,
   //gettimeofday(&end, NULL);
   duration = (end.tv_sec - begin.tv_sec) * 1000.0;      // sec to ms
   duration += (end.tv_usec - begin.tv_usec) / 1000.0;   // us to ms
-  total_trajectory_time += duration;
+  total_trajectory_time += duration_expected;
   cout << endl << "Trajectory Time for Pose " << pose_number << ": " << duration_expected << " seconds" << endl;
   outfile << "Trajectory Time for Pose " << pose_number << ": " << duration_expected << " seconds" << endl;
   outfilecsv << duration_expected << endl;
@@ -179,13 +187,13 @@ int main(int argc, char **argv)
     
   //segbot_arm_manipulation::homeArm(nh);
   segbot_arm_manipulation::closeHand();
-  controller_client = nh.serviceClient<moveit_utils::MicoController>("mico_controller");
+  //controller_client = nh.serviceClient<moveit_utils::MicoController>("mico_controller");
   signal(SIGINT, sig_handler);
   pressEnter();
   ROS_INFO("Planner Testing Starting...");
   
   // change 2 to 11;
-  for(int i = 0; i < 2; i++){
+  for(int i = 0; i < 11; i++){
   cout << "Planner Name: " << planners[i] << endl << endl;
   outfile << "Planner Name: " << planners[i] << endl << endl;
   outfilecsv << planners[i] << endl;
@@ -230,7 +238,7 @@ int main(int argc, char **argv)
   outfile << "++++++++++ Total Planning Time: " <<
 		total_planning_time << " ms or " << total_planning_time/1000 << " sec" << endl;  
   outfile << "++++++++++ Total Trajectory Time: " << 
-        total_trajectory_time << " ms or " << total_trajectory_time/1000 << " sec" << endl << endl;
+        total_trajectory_time  << " sec" << endl << endl;
 
   outfilecsv << "Total" << "," << total_planning_time << "," << total_trajectory_time << endl;
   total_planning_time = 0.0;
