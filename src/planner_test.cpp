@@ -153,7 +153,7 @@
     ROS_INFO("Planner Testing Starting...");
     
     // change 2 to 11;
-    for(int i = 0; i < 11; i++){
+    for(int i = 9; i < 11; i++){
     cout << "Planner Name: " << planners[i] << endl << endl;
     outfile << "Planner Name: " << planners[i] << endl << endl;
     outfilecsv << planners[i] << endl;
@@ -187,7 +187,7 @@
     cout << endl << "++++++++++ Total Planning Time: " <<
   		total_planning_time << " ms or " << total_planning_time/1000 << " sec" << endl;
     cout << endl << "++++++++++ Total Trajectory Time: " << 
-          total_trajectory_time << " ms or " << total_trajectory_time/1000 << " sec" << endl;
+          total_trajectory_time << " ms or " << total_trajectory_time << " sec" << endl;
     
     // write results to a file
     outfile << "++++++++++ Total Planning Time: " <<

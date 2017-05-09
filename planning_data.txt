@@ -1,0 +1,138 @@
+Planner Name: SBLkConfigDefault
+
+Planning Time for Pose 0: 672.225 ms
+Trajectory Time for Pose 0: 11.7781 seconds
+Planning Time for Pose 1: 567.733 ms
+Trajectory Time for Pose 1: 7.69383 seconds
+Planning Time for Pose 2: 463.517 ms
+Trajectory Time for Pose 2: 14.5505 seconds
+Planning Time for Pose 3: 250.767 ms
+Trajectory Time for Pose 3: 16.1169 seconds
+Planning Time for Pose 4: 554.846 ms
+Trajectory Time for Pose 4: 13.7658 seconds
+Planning Time for Pose 5: 711.77 ms
+Trajectory Time for Pose 5: 11.461 seconds
+++++++++++ Total Planning Time: 3220.86 ms or 3.22086 sec
+++++++++++ Total Trajectory Time: 75.3661 sec
+
+Planner Name: ESTkConfigDefault
+
+Planning Time for Pose 0: 196.481 ms
+Trajectory Time for Pose 0: 11.7723 seconds
+Planning Time for Pose 1: 81.684 ms
+Trajectory Time for Pose 1: 11.9514 seconds
+Planning Time for Pose 2: 383.303 ms
+Trajectory Time for Pose 2: 11.7563 seconds
+Planning Time for Pose 3: 59.301 ms
+Trajectory Time for Pose 3: 4.21181 seconds
+Planning Time for Pose 4: 528.579 ms
+Trajectory Time for Pose 4: 16.8472 seconds
+Planning Time for Pose 5: 277.935 ms
+Trajectory Time for Pose 5: 15.5585 seconds
+++++++++++ Total Planning Time: 1527.28 ms or 1.52728 sec
+++++++++++ Total Trajectory Time: 72.0974 sec
+
+Planner Name: LBKPIECEkConfigDefault
+
+Planning Time for Pose 0: 392.155 ms
+Trajectory Time for Pose 0: 12.6303 seconds
+Planning Time for Pose 1: 319.137 ms
+Trajectory Time for Pose 1: 13.1908 seconds
+Planning Time for Pose 2: 399.762 ms
+Trajectory Time for Pose 2: 13.1925 seconds
+Planning Time for Pose 3: 765.731 ms
+Trajectory Time for Pose 3: 14.8393 seconds
+Planning Time for Pose 4: 1284.82 ms
+Trajectory Time for Pose 4: 12.0793 seconds
+Planning Time for Pose 5: 1493.69 ms
+Not SUccessful 
+++++++++++ Total Planning Time: 4655.29 ms or 4.65529 sec
+++++++++++ Total Trajectory Time: 65.9322 sec
+
+Planner Name: BKPIECEkConfigDefault
+
+Planning Time for Pose 0: 584.758 ms
+Trajectory Time for Pose 0: 12.6304 seconds
+Planning Time for Pose 1: 235.584 ms
+Trajectory Time for Pose 1: 13.1905 seconds
+Planning Time for Pose 2: 842.709 ms
+Trajectory Time for Pose 2: 13.1962 seconds
+Planning Time for Pose 3: 778.421 ms
+Trajectory Time for Pose 3: 26.6253 seconds
+Planning Time for Pose 4: 630.323 ms
+Trajectory Time for Pose 4: 13.7673 seconds
+Planning Time for Pose 5: 952.768 ms
+Trajectory Time for Pose 5: 16.5005 seconds
+++++++++++ Total Planning Time: 4024.56 ms or 4.02456 sec
+++++++++++ Total Trajectory Time: 95.9102 sec
+
+Planner Name: KPIECEkConfigDefault
+
+Planning Time for Pose 0: 839.343 ms
+Trajectory Time for Pose 0: 11.7777 seconds
+Planning Time for Pose 1: 77.486 ms
+Trajectory Time for Pose 1: 7.69293 seconds
+Planning Time for Pose 2: 240.218 ms
+Not SUccessful 
+Planning Time for Pose 3: 236.805 ms
+Trajectory Time for Pose 3: 15.2104 seconds
+Planning Time for Pose 4: 50.79 ms
+Trajectory Time for Pose 4: 13.7656 seconds
+Planning Time for Pose 5: 176.962 ms
+Trajectory Time for Pose 5: 15.3797 seconds
+++++++++++ Total Planning Time: 1621.6 ms or 1.6216 sec
+++++++++++ Total Trajectory Time: 63.8264 sec
+
+Planner Name: RRTkConfigDefault
+
+Planning Time for Pose 0: 359.711 ms
+Trajectory Time for Pose 0: 8.61704 seconds
+Planning Time for Pose 1: 160.464 ms
+Trajectory Time for Pose 1: 13.1904 seconds
+Planning Time for Pose 2: 170.81 ms
+Trajectory Time for Pose 2: 11.7408 seconds
+Planning Time for Pose 3: 110.758 ms
+Trajectory Time for Pose 3: 4.20245 seconds
+Planning Time for Pose 4: 252.29 ms
+Trajectory Time for Pose 4: 11.878 seconds
+Planning Time for Pose 5: 188.652 ms
+Trajectory Time for Pose 5: 11.4372 seconds
+++++++++++ Total Planning Time: 1242.68 ms or 1.24269 sec
+++++++++++ Total Trajectory Time: 61.066 sec
+
+Planner Name: RRTConnectkConfigDefault
+
+Planning Time for Pose 0: 184.036 ms
+Trajectory Time for Pose 0: 8.614 seconds
+Planning Time for Pose 1: 99.73 ms
+Trajectory Time for Pose 1: 11.9509 seconds
+Planning Time for Pose 2: 266.602 ms
+Trajectory Time for Pose 2: 11.1331 seconds
+Planning Time for Pose 3: 211.54 ms
+Trajectory Time for Pose 3: 21.4778 seconds
+Planning Time for Pose 4: 178.532 ms
+Trajectory Time for Pose 4: 13.7646 seconds
+Planning Time for Pose 5: 159.54 ms
+Trajectory Time for Pose 5: 6.59916 seconds
+++++++++++ Total Planning Time: 1099.98 ms or 1.09998 sec
+++++++++++ Total Trajectory Time: 73.5395 sec
+
+Planner Name: RRTstarkConfigDefault
+
+Planning Time for Pose 0: 10027.9 ms
+Trajectory Time for Pose 0: 14.553 seconds
+Planning Time for Pose 1: 10023.6 ms
+Trajectory Time for Pose 1: 13.1919 seconds
+Planning Time for Pose 2: 10028 ms
+Trajectory Time for Pose 2: 13.5366 seconds
+Planning Time for Pose 3: 10039.8 ms
+Trajectory Time for Pose 3: 20.2709 seconds
+Planning Time for Pose 4: 10026.7 ms
+Trajectory Time for Pose 4: 13.7076 seconds
+Planning Time for Pose 5: 10027.2 ms
+Trajectory Time for Pose 5: 16.5679 seconds
+++++++++++ Total Planning Time: 60173.2 ms or 60.1732 sec
+++++++++++ Total Trajectory Time: 91.8278 sec
+
+
+
